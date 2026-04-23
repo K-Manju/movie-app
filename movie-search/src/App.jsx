@@ -3,6 +3,7 @@ import Search from './components/Search.jsx'
 import Spinner from './components/Spinner.jsx'
 import {useEffect, useState } from 'react';
 import MovieCard from './components/MovieCard.jsx';
+import {useDebounce} from 'react-use'
 
 //API - Application Programming "Interface - a set of rules that allows one software application to talk to another"
 
@@ -24,12 +25,17 @@ const[searchTerm,setSearchTerm]=useState('');
 const[errorMessage, setErrorMessage] = useState('');
 const [movieList,setMovieList] = useState([]);
 const [isLoading,setIsLoading] =useState(false);
+const [debouncedSearchTerm, setDenouncedSearchTerm]=useState('');
 
-const fetchMovies = async () =>{
+useDebounce()
+
+const fetchMovies = async (query='') =>{
   setIsLoading(true);
   setErrorMessage('');
   try{
-    const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+    const endpoint = query
+    ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+    :`${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
 
     const response = await fetch(endpoint,API_OPTIONS);
     if(!response.ok){
@@ -52,8 +58,8 @@ const fetchMovies = async () =>{
 };
 
 useEffect(()=>{
-  fetchMovies();
-},[]);
+  fetchMovies(searchTerm);
+},[searchTerm]);
 
   return (
     <main>
