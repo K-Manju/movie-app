@@ -2,6 +2,7 @@ import React from 'react'
 import Search from './components/Search.jsx'
 import Spinner from './components/Spinner.jsx'
 import {useEffect, useState } from 'react';
+import MovieCard from './components/MovieCard.jsx';
 
 //API - Application Programming "Interface - a set of rules that allows one software application to talk to another"
 
@@ -71,7 +72,7 @@ useEffect(()=>{
             <p className='text-red-500'>{errorMessage}</p>
           ):(
             <ul>{movieList.map((movie)=>(
-              <p key={movie.id} className='text-white'>{movie.title}</p>
+              <MovieCard keys={movie.id} movie={movie}/>
             ))}
             </ul>
           )}
